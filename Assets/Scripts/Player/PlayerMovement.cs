@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         Vector2 direction = new Vector2(horizontalInput, 0);
-        rigidbodyPlayer.velocity = direction * m_speedPlayer;
+        rigidbodyPlayer.linearVelocity = direction * m_speedPlayer;
     }
 }
 

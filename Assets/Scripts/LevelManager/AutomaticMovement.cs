@@ -21,11 +21,11 @@ public class AutomaticMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Kontrollieren ob die Endposition für den Arm in vertikaler Richtung erreicht ist, wenn ja, dann auf Anfangsposition setzen
+        //Kontrollieren ob die Endposition fï¿½r den Arm in vertikaler Richtung erreicht ist, wenn ja, dann auf Anfangsposition setzen
         if (endPosition == false)
         {
             Vector2 direction = new Vector2(0, 1);
-            rigidbody.velocity = direction * _speed;
+            rigidbody.linearVelocity = direction * _speed;
         }
         else
         {
@@ -36,7 +36,7 @@ public class AutomaticMovement : MonoBehaviour
          
     }
 
-    //Überprüft die Kollision des Arms mit dem oberen Ende der Spielfläche
+    //ï¿½berprï¿½ft die Kollision des Arms mit dem oberen Ende der Spielflï¿½che
     void OnTriggerEnter2D (Collider2D _collision)
     {
         if (_collision.gameObject.tag == "DownMovement")
