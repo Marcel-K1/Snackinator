@@ -7,27 +7,42 @@ public class Snack : MonoBehaviour
     [SerializeField]
     private Rigidbody2D snackObject;
 
-    void Start()
+    // Ersetzt Start(). Wird JEDES MAL aufgerufen, wenn der Spawner den Snack aktiviert.
+    void OnEnable()
     {
+        // 1. Reset: Den Schwung (Geschwindigkeit) vom vorherigen Wurf auf null setzen
+        snackObject.linearVelocity = Vector2.zero; 
+        
+        // 2. Reset: Gravitation wieder ausstellen, damit er schwebt
+        snackObject.gravityScale = 0f; 
+
+        // 3. Jetzt erst die Coroutine zum Fallen starten
         StartCoroutine(SetGravityScaleAfterSeconds());
     }
 
-    //Kontrolliert die Kollision des Snacks mit dem Player oder dem unteren Ende der Spielfl‰che
     private void OnTriggerEnter2D(Collider2D _collision)
     {
-        if (_collision.gameObject.tag == "Player")
+        // Pro-Tipp: CompareTag() ist f√ºr WebGL performanter als == "String"
+        if (_collision.gameObject.CompareTag("Player")) 
         {
             AudioSource snackEffect = _collision.gameObject.GetComponent<AudioSource>();
-            snackEffect.Play();
-            Destroy(this.gameObject);
+            
+            // Kleine Sicherheitsabfrage, falls mal keine AudioSource da ist
+            if (snackEffect != null) 
+            {
+                snackEffect.Play();
+            }
+            
+            // RECYCLING: Zerst√∂re das Objekt nicht, verstecke es nur!
+            gameObject.SetActive(false);
         }
-        else if (_collision.gameObject.tag == "Bottom")
+        else if (_collision.gameObject.CompareTag("Bottom"))
         {
-            Destroy(this.gameObject);
+            // RECYCLING: Auch hier nur verstecken
+            gameObject.SetActive(false);
         }
     }
 
-    //L‰sst dir Snacks erst eine gewisse Zeit schweben, bevor sie fallen
     private IEnumerator SetGravityScaleAfterSeconds()
     {
         yield return new WaitForSeconds(0.25f);
